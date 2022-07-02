@@ -1,17 +1,21 @@
 .header {
   width: 100%;
-  height: 40px;
+  height: 60px;
   background-color: #3b5998;
   display: flex;
   justify-content: center;
 }
 
 .search-form {
-margin: auto 0;
+  margin: auto 0;
+  width: 250px;
+  height: 40px;
   position: relative;
 };
 
 .search-form input {
+  width: 100%;
+  height: 100%;
   border: none;
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1), inset 0 1px 2px rgba(0, 0, 0, 0.3);
   border-radius: 5px;
@@ -30,6 +34,7 @@ position: absolute;
   cursor: pointer;
   background: url(https://lh4.googleusercontent.com/-b-5aBxcxarY/UAfFW9lVyjI/AAAAAAAABUg/gQtEXuPuIds/s13/go.png) 50% no-repeat;
   opacity: 0.5;
+  border: none
 };
 
 .search-form button:hover {
