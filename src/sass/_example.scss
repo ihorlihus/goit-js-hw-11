@@ -1,3 +1,20 @@
+*,
+p,
+h1,
+h2,
+h3,
+h4,
+h6 li {
+  margin: 0;
+  padding: 0;
+};
+
+img {
+  display: block;
+  width: 100%;
+  height: 230px;
+}
+
 .header {
   width: 100%;
   height: 60px;
@@ -42,4 +59,38 @@ position: absolute;
 };
 input[type="search"] {
   -webkit-appearance: none;
+};
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 0;
+  margin: 0;
+};
+
+.photo-card {
+  margin: 10px;
+  width: calc(100% / 4 - 30px);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+};
+
+.info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 0;
+  margin: 0;
+  height: 50px;
+};
+
+.info-item {
+  width: min-content;
+  text-align: center;
+  padding: 7;
+  
+};
+
+.info-item span {
+  font-weight: normal;
 }
