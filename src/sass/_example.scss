@@ -72,8 +72,8 @@ input[type='search'] {
 }
 
 .photo-card {
-  margin: 10px;
-  width: calc(100% / 4 - 30px);
+  margin: 5px;
+  width: calc(100% / 4 - 15px);
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
@@ -89,7 +89,7 @@ input[type='search'] {
 .info-item {
   width: min-content;
   text-align: center;
-  padding: 4px;
+  padding: 5px;
 }
 
 .info-item span {

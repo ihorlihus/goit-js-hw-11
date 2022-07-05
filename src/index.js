@@ -1,3 +1,4 @@
+import 'modern-normalize';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
@@ -7,6 +8,7 @@ import { createImagesElements } from './createGallery';
 const input = document.querySelector('.search-form input');
 const form = document.querySelector('.search-form');
 const gallary = document.querySelector('.gallery');
+let elementFofObserver = gallary.lastElementChild;
 let enterValue = '';
 let page = 1;
 
@@ -20,12 +22,13 @@ form.addEventListener('submit', event => {
 });
 
 function check(data) {
-  if (data === { total: 0, totalHits: 0, hits: Array(0) }) {
+  if (data === undefined) {
     console.log('no data');
     return;
   } else {
     gallary.insertAdjacentHTML('beforeend', createImagesElements(data.hits));
     page += 1;
+    observer.observe(document.querySelector('.gallery').lastElementChild);
     lightbox.refresh();
   }
 }
@@ -38,6 +41,32 @@ const lightbox = new SimpleLightbox('.photo-card a', {
   captionsData: 'alt',
   captionDelay: 250,
 });
+
+const options = {
+  rootMargin: '200px',
+  threshold: 1.0,
+};
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    console.log('observ start');
+    if (entry.isIntersecting) {
+      console.log('down');
+      fetchMaterials().then(data => check(data)); // URL
+    }
+  });
+}, options);
+
+// function observerCheckCont() {
+//   // console.log(gallary.contains(document.querySelector('.photo-card')));
+//   if (gallary.contains(document.querySelector('.photo-card')) === false) {
+//     console.log('no content');
+//     return;
+//   } else {
+//     ;
+//   }
+// }
+// observerCheckCont();
 
 // try {
 //   fetchMaterials().then(pictures =>
