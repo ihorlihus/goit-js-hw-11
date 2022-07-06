@@ -8,24 +8,38 @@ import { createImagesElements } from './createGallery';
 const input = document.querySelector('.search-form input');
 const form = document.querySelector('.search-form');
 const gallary = document.querySelector('.gallery');
-let elementFofObserver = gallary.lastElementChild;
+const per_page = 40;
 let enterValue = '';
 let page = 1;
 
 axios.defaults.baseURL =
-  'https://pixabay.com/api/?key=28400374-5eacf081d2efacca1adf31c1f&image_type=photo&orientation=horizontal&safesearch=true&per_page=40';
+  'https://pixabay.com/api/?key=28400374-5eacf081d2efacca1adf31c1f&image_type=photo&orientation=horizontal&safesearch=true&';
 
 form.addEventListener('submit', event => {
   event.preventDefault();
   enterValue = input.value;
+  gallary.innerHTML = '';
+  page = 1;
   fetchMaterials().then(data => check(data));
 });
 
 function check(data) {
-  if (data === undefined) {
-    console.log('no data');
+  if (data.totalHits === 0) {
+    Notify.failure(
+      'Sorry, there are no images matching your search query. Please try again.'
+    );
+    return;
+  }
+  if (Number(page) * per_page >= data.totalHits) {
+    Notify.warning(
+      "We're sorry, but you've reached the end of search results."
+    );
+    observer.disconnect();
     return;
   } else {
+    if (Number(page) === 1) {
+      Notify.success(`Hooray! We found ${data.totalHits} images.`);
+    }
     gallary.insertAdjacentHTML('beforeend', createImagesElements(data.hits));
     page += 1;
     observer.observe(document.querySelector('.gallery').lastElementChild);
@@ -34,7 +48,9 @@ function check(data) {
 }
 
 async function fetchMaterials() {
-  return await axios.get(`&q=${enterValue}&page=${page}`).then(res => res.data);
+  return await axios
+    .get(`&q=${enterValue}&page=${page}&per_page=${per_page}`)
+    .then(res => res.data);
 }
 
 const lightbox = new SimpleLightbox('.photo-card a', {
@@ -42,39 +58,16 @@ const lightbox = new SimpleLightbox('.photo-card a', {
   captionDelay: 250,
 });
 
-const options = {
-  rootMargin: '200px',
-  threshold: 1.0,
-};
-
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    console.log('observ start');
-    if (entry.isIntersecting) {
-      console.log('down');
-      fetchMaterials().then(data => check(data)); // URL
-    }
-  });
-}, options);
-
-// function observerCheckCont() {
-//   // console.log(gallary.contains(document.querySelector('.photo-card')));
-//   if (gallary.contains(document.querySelector('.photo-card')) === false) {
-//     console.log('no content');
-//     return;
-//   } else {
-//     ;
-//   }
-// }
-// observerCheckCont();
-
-// try {
-//   fetchMaterials().then(pictures =>
-// gallary.insertAdjacentHTML(
-//   'afterbegin',
-//   createImagesElements(pictures.hits)
-// )
-//   );
-// } catch (error) {
-//   throw new Error(console.log(error));
-// }
+const observer = new IntersectionObserver(
+  entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        fetchMaterials().then(data => check(data));
+      }
+    });
+  },
+  {
+    rootMargin: '200px',
+    threshold: 1.0,
+  }
+);
