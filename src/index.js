@@ -17,9 +17,12 @@ axios.defaults.baseURL =
 
 form.addEventListener('submit', event => {
   event.preventDefault();
-  enterValue = input.value;
+  enterValue = input.value.trim();
   gallary.innerHTML = '';
   page = 1;
+  if (enterValue === '') {
+    return;
+  }
   fetchMaterials().then(data => check(data));
 });
 
@@ -30,7 +33,10 @@ function check(data) {
     );
     return;
   }
-  if (Number(page) * per_page >= data.totalHits) {
+  if (
+    Number(page) * data.hits.length >= data.totalHits &&
+    data.totalHits > per_page
+  ) {
     Notify.warning(
       "We're sorry, but you've reached the end of search results."
     );
@@ -39,6 +45,7 @@ function check(data) {
   } else {
     if (Number(page) === 1) {
       Notify.success(`Hooray! We found ${data.totalHits} images.`);
+      console.log(data.hits.length);
     }
     gallary.insertAdjacentHTML('beforeend', createImagesElements(data.hits));
     page += 1;
